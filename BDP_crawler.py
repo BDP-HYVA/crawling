@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[5]:
 
 
 from bs4 import BeautifulSoup
@@ -65,17 +65,16 @@ def enter_tab(string):
     return output
 
 
+##----seting-----##
+
+# fake 로 입력되지만 실제론 real인 링크들... 추가해야함
 errorset={}
 
-page = 1#67
+page = 1 #67
 url_set = set({})
 
 
-
-    
-
-
-# In[8]:
+# In[6]:
 
 
 error_cnt=0
@@ -109,9 +108,9 @@ while a < len(arealist):
     a+=1
 
 idx=0
-
+dict2={"홍대":"Hongik","신촌":"Sinchon","건대":"Konkuk","명동":"MyungDong","명지대":"MyungJi","강남":"Gangnam"}
 while idx < len(dict1):
-    data = open('reviews_%s.txt'%list(dict1.keys())[idx], 'w', encoding='UTF-8')
+    data = open('reviews_%s.txt'%dict2[list(dict1.keys())[idx]], 'w', encoding='UTF-8')
     for url in list(dict1.values())[idx]:
         try:
             if url not in url_set:
@@ -136,6 +135,7 @@ while idx < len(dict1):
                     else:
                         article = soup.find_all("div", attrs={"id":"postViewArea"})[0]
 
+
                     post_article = str(article)
                     mainarticle = onlytext(post_article)
                     index1 =0
@@ -155,7 +155,7 @@ while idx < len(dict1):
                             sentence = mainarticle[index1 + 1:index2]
                             #print(url, sentence)
 
-                    datastring = datastring + "real\t%s\t%s\t%s\n" % (url, list(dict1.keys())[idx], mainarticle[:index1+1] + ' ' + mainarticle[index2+1:])
+                    datastring = datastring + "%s\n" % (mainarticle[:index1+1] + ' ' + mainarticle[index2+1:])
                     data.write(datastring)
                     url_set.add(url)
         except:
@@ -163,8 +163,8 @@ while idx < len(dict1):
             error_cnt+=1
     
     data.close()
-    file = pd.read_csv('reviews_%s.txt'%list(dict1.keys())[idx], header=None, sep = '\t')
-    file.to_csv('reviews_%s.csv'%list(dict1.keys())[idx], index=False, encoding='utf-8-sig')
+    file = pd.read_csv('reviews_%s.txt'%dict2[list(dict1.keys())[idx]], header=None, sep = '\t')
+    file.to_csv('reviews_%s.csv'%dict2[list(dict1.keys())[idx]], index=False, encoding='utf-8-sig')
     idx+=1
 print(len(url_set))
 print(error_cnt)
@@ -172,4 +172,10 @@ print(error_cnt)
 
 end_time = time.time()
 print("모든 프로세스: %f 분" % ((end_time - start_time) / 60))
+
+
+# In[ ]:
+
+
+
 
