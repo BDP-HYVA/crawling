@@ -1,28 +1,21 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
-
-
 from bs4 import BeautifulSoup
 import time,requests,re
 from konlpy.tag import Okt
 import pandas as pd
 start_time = time.time()
 
-
 #쓸데없는 스크립트 제거함수
 def onlytext(string):
-    string=string.replace('<div align="center">', ' ') # 이것만 따로 보기??
-    #string = string.replace('<br/>', ' / ')
+    string=string.replace('<div align="center">', ' ')
     string = string.replace('<br>', ' ')
-    #string = string.replace('<p>', ' / ' )
-    #string = string.replace('</p>', ' / ')
-
     length = len(string)
     tagend = 0
     count = 0
     flag = 0
+    
     if '<' in string:
         output = ''
         for i in range(length):
@@ -64,25 +57,13 @@ def enter_tab(string):
     output = output.replace("\r", "")
     return output
 
-
-##----seting-----##
-
-# fake 로 입력되지만 실제론 real인 링크들... 추가해야함
 errorset={}
-
 page = 1 #67
 url_set = set({})
-
-
-# In[6]:
-
-
 error_cnt=0
-nlp = Okt()  # Twitter 라이브러리 사용
-
+nlp = Okt()
 negative=('아니다','절대','검색','그냥','듯','같다','대부분','어디서', '그렇다' ,'전혀')
 regex = r'[가-힣, \s ]+'
-
 
 ##-----real------##
 arealist=["홍대","신촌","건대","명동","명지대","강남"]
@@ -106,7 +87,6 @@ while a < len(arealist):
         dict1[arealist[a]]=list1
         datastring = ''
     a+=1
-
 idx=0
 dict2={"홍대":"Hongik","신촌":"Sinchon","건대":"Konkuk","명동":"MyungDong","명지대":"MyungJi","강남":"Gangnam"}
 while idx < len(dict1):
@@ -134,8 +114,6 @@ while idx < len(dict1):
                         article = soup.find_all("div", attrs={"class":"se-main-container"})[0]
                     else:
                         article = soup.find_all("div", attrs={"id":"postViewArea"})[0]
-
-
                     post_article = str(article)
                     mainarticle = onlytext(post_article)
                     index1 =0
@@ -153,8 +131,7 @@ while idx < len(dict1):
                                     index2 = a
                                     break
                             sentence = mainarticle[index1 + 1:index2]
-                            #print(url, sentence)
-
+                            
                     datastring = datastring + "%s\n" % (mainarticle[:index1+1] + ' ' + mainarticle[index2+1:])
                     data.write(datastring)
                     url_set.add(url)
@@ -168,14 +145,5 @@ while idx < len(dict1):
     idx+=1
 print(len(url_set))
 print(error_cnt)
-
-
 end_time = time.time()
 print("모든 프로세스: %f 분" % ((end_time - start_time) / 60))
-
-
-# In[ ]:
-
-
-
-
