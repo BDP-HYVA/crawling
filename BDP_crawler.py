@@ -1,10 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
+#-*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
 import time,requests,re
 from konlpy.tag import Okt
 import pandas as pd
+
 start_time = time.time()
 
 #쓸데없는 스크립트 제거함수
@@ -36,7 +36,7 @@ def onlytext(string):
             elif string[i] != "<":
                 count += 1
     else:
-        output =string
+        output = string
     output = output.replace('[', '')
     output = output.replace(']', '')
     output = output.replace('\ufeff;', '')
@@ -58,7 +58,7 @@ def enter_tab(string):
     return output
 
 errorset={}
-page = 1 #67
+page = 1
 url_set = set({})
 error_cnt=0
 nlp = Okt()
@@ -143,6 +143,7 @@ while idx < len(dict1):
     file = pd.read_csv('reviews_%s.txt'%dict2[list(dict1.keys())[idx]], header=None, sep = '\t')
     file.to_csv('reviews_%s.csv'%dict2[list(dict1.keys())[idx]], index=False, encoding='utf-8-sig')
     idx+=1
+    
 print(len(url_set))
 print(error_cnt)
 end_time = time.time()
